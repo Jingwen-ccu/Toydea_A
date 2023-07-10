@@ -30,12 +30,12 @@ public class BulletSpawner : MonoBehaviour {
         if(Input.GetKeyUp(KeyCode.P) && gameObject.name == "Prisoner" && prisonerMagazine > 0) {
             PrisonerAttack(bullet_position);
             prisonerMagazine--;
-            Debug.Log("prisoner Fire!");
+            Debug.Log("prisoner Fire!" + "\n prisonerMagazine remaining = " + prisonerMagazine);
 
         } else if(Input.GetKeyUp(KeyCode.A) && gameObject.name == "Executor" && executorMagazine > 0) {
             ExecutorAttack(bullet_position);
             executorMagazine--;
-            Debug.Log("executor Fire!");
+            Debug.Log("executor Fire!" + "\n executorMagazine remaining = " + executorMagazine);
         }
 
     }

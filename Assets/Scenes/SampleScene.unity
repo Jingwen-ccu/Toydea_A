@@ -791,9 +791,9 @@ MonoBehaviour:
   LeftBullet: {fileID: 1577667800561791273, guid: 216c2d2ea54fe7a44b2b4c5532b87577, type: 3}
   isBonusTime: 0
   prisonerCooldown:
-    cooldownTime: 0
+    cooldownTime: 3
   executorCooldown:
-    cooldownTime: 0
+    cooldownTime: 3
 --- !u!1 &689863457
 GameObject:
   m_ObjectHideFlags: 0
@@ -1624,9 +1624,9 @@ MonoBehaviour:
   LeftBullet: {fileID: 1577667800561791273, guid: 216c2d2ea54fe7a44b2b4c5532b87577, type: 3}
   isBonusTime: 0
   prisonerCooldown:
-    cooldownTime: 0
+    cooldownTime: 3
   executorCooldown:
-    cooldownTime: 0
+    cooldownTime: 3
 --- !u!1 &1381243562
 GameObject:
   m_ObjectHideFlags: 0

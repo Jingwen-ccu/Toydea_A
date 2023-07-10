@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ExecutorController : MonoBehaviour {
     private bool is_round_start = true;
+    private bool is_Bonus = false;
     private float final_velocity;
     private float velocity = 200;
     private float start_velocity;
@@ -15,7 +16,7 @@ public class ExecutorController : MonoBehaviour {
 
     //JingWem Add
     public GameMode GM;
-  
+
 
 
     void Start() {
@@ -65,18 +66,30 @@ public class ExecutorController : MonoBehaviour {
             Destroy(gameObject);
         }
     }
+    public void OnBonusStart() {
+        rb.velocity = new Vector3(0, 0, 0);
+        transform.position = new Vector2(transform.position.x, 0);
+    }
+    public void OnBonusEnd() {
+        rb.velocity = new Vector3(0, start_velocity, 0);
+    }
     public void OnGameStart() {
         Health = 3;
-
+        is_Bonus = false;
+        is_round_start = true;
     }
     public void OnGameEnd() {
-
+        is_Bonus = false;
+        is_round_start = false;
     }
 
     public void OnRoundStart() {
-
+        is_Bonus = false;
+        is_round_start = true;
     }
     public void OnRoundEnd() {
         //Curtain close
+        is_Bonus = false;
+        is_round_start = false;
     }
 }
