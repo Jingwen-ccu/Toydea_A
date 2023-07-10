@@ -1,17 +1,14 @@
 using UnityEngine;
 
-public class BulletSpawner : MonoBehaviour {
+public class RightBulletSpawner : MonoBehaviour {
     public GameObject RightBullet;
-    public GameObject LeftBullet;
-    public bool isBonusTime;
     public PrisonerCooldown prisonerCooldown;
-    public ExecutorCooldown executorCooldown;
+
+    public bool isBonus;
     private int prisonerMagazine;
-    private int executorMagazine;
     // Start is called before the first frame update
     void Start() {
         prisonerMagazine = 3;
-        executorMagazine = 3;
     }
 
     // Update is called once per frame
@@ -22,20 +19,12 @@ public class BulletSpawner : MonoBehaviour {
             prisonerMagazine = 3;
             Debug.Log("prisoner reloaded!");
         }
-        if(executorMagazine < 3 && !executorCooldown.IsCoolingDown) {
-            executorMagazine = 3;
-            Debug.Log("executor reloaded!");
-        }
 
-        if(Input.GetKeyUp(KeyCode.P) && gameObject.name == "Prisoner" && prisonerMagazine > 0) {
+        if(Input.GetKeyUp(KeyCode.P) && gameObject.name == "Prisoner" && prisonerMagazine > 0 && !isBonus) {
             PrisonerAttack(bullet_position);
             prisonerMagazine--;
             Debug.Log("prisoner Fire!" + "\n prisonerMagazine remaining = " + prisonerMagazine);
 
-        } else if(Input.GetKeyUp(KeyCode.A) && gameObject.name == "Executor" && executorMagazine > 0) {
-            ExecutorAttack(bullet_position);
-            executorMagazine--;
-            Debug.Log("executor Fire!" + "\n executorMagazine remaining = " + executorMagazine);
         }
 
     }
@@ -45,15 +34,8 @@ public class BulletSpawner : MonoBehaviour {
         if(prisonerCooldown.IsCoolingDown) { return; }// if already in cooldown then skip
         prisonerCooldown.StartCooldown();
     }
-    private void ExecutorAttack(Vector2 bullet_position) {
-        GameObject leftbullet = Instantiate(LeftBullet);
-        leftbullet.transform.position = bullet_position;
-        if(executorCooldown.IsCoolingDown) { return; }
-        executorCooldown.StartCooldown();
-    }
 
     public void OnRoundStart() {
         prisonerMagazine = 3;
-        executorMagazine = 3;
     }
 }

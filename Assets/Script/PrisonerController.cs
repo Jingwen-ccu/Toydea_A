@@ -14,7 +14,7 @@ public class PrisonerController : MonoBehaviour {
     public float Health = 3;
     public int click_counter;
 
-
+    public BonusBuffController bonusBuffController;
     //JingWem Add
     public GameMode GM;
 
@@ -72,7 +72,9 @@ public class PrisonerController : MonoBehaviour {
             OnGameStart();
         }
     }
-    public void InitPrisonerPos() {
+    public void InitPrisoner() {
+        rb.velocity = new Vector3(0, start_velocity, 0);
+        transform.position = new Vector2(transform.position.x, 0);
 
     }
     public void OnBonusStart() {
@@ -89,6 +91,7 @@ public class PrisonerController : MonoBehaviour {
         Health = 3;
         is_Bonus = false;
         is_round_start = true;
+        InitPrisoner();
     }
     public void OnGameEnd() {
         is_Bonus = false;
@@ -98,6 +101,7 @@ public class PrisonerController : MonoBehaviour {
     public void OnRoundStart() {
         is_Bonus = false;
         is_round_start = true;
+        InitPrisoner();
     }
     public void OnRoundEnd() {
         //Curtain close

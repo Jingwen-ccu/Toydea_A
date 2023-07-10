@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ExecutorController : MonoBehaviour {
+public class BonusBuffController : MonoBehaviour {
     public bool is_round_start = true;
     public bool is_Bonus = false;
     private float final_velocity;
@@ -13,42 +13,47 @@ public class ExecutorController : MonoBehaviour {
     private float multiplier = 2;
     public float Health = 3;
     public int click_counter;
+    private int suit_time = 5;
+    private int bandana_time = 5;
+    private int zawarudo_time = 3;
+    private int blind_time = 5;
+    private float time;
 
-
-    public BonusBuffController bonusBuffController;
-    //JingWem Add
+    public BonusEventDirector bonusEventDirector;
     public GameMode GM;
 
-
-
-
     void Start() {
+
+        is_Bonus = false;
         acceration = multiplier * 2;
         decend = multiplier;
         start_velocity = velocity / 100 * multiplier;
         final_velocity = start_velocity * (multiplier * 2);
         rb = GetComponent<Rigidbody2D>();
-        rb.velocity = new Vector3(0, start_velocity * -1, 0);
+        rb.velocity = new Vector3(0, start_velocity, 0);
         Health = 3;
     }
-
+    private void OnEnable() {
+        InitPrisoner();
+        time = 0;
+    }
     void Update() {
-        if(is_Bonus) { // Bonus time
-            if(Input.GetKeyDown(KeyCode.A)) {
+        time += Time.deltaTime;
+        if(is_Bonus) {//Bonus time
+            if(Input.GetKeyDown(KeyCode.P)) {
                 click_counter++;
             }
         } else {
-            ExecutorMovement();
+            PrisonerMovement();
             lastVelocity = rb.velocity;
         }
 
     }
-    private void ExecutorMovement() {
-        if(Input.GetKey(KeyCode.A)) {
+    private void PrisonerMovement() {
+        if(Input.GetKey(KeyCode.P)) {
             if(rb.velocity.y <= final_velocity && rb.velocity.y > 0) {
                 rb.AddForce(new Vector2(0, velocity * acceration * Time.deltaTime));
-
-            } else if(rb.velocity.y >= -1 * final_velocity && rb.velocity.y <= 0) {
+            } else if(rb.velocity.y >= final_velocity * -1 && rb.velocity.y <= 0) {
                 rb.AddForce(new Vector2(0, -1 * velocity * acceration * Time.deltaTime));
             }
         } else {
@@ -67,45 +72,34 @@ public class ExecutorController : MonoBehaviour {
     }
     public void OnHit() {
         Health--;
+        GM.HitPlayer(true);
 
-        //JingWen Add
-        GM.HitPlayer(false);
-
-        //Debug.Log(Health);
+        Debug.Log(Health);
         if(Health == 0) {
             Destroy(gameObject);
+            OnGameStart();
         }
     }
-    public void InitExecutor() {
-        rb.velocity = new Vector3(0, start_velocity * -1, 0);
+    public void InitPrisoner() {
+        rb.velocity = new Vector3(0, start_velocity, 0);
         transform.position = new Vector2(transform.position.x, 0);
     }
-    public void OnBonusStart() {
-        transform.position = new Vector2(transform.position.x, 0);
-        rb.velocity = new Vector3(0, 0, 0);
-        click_counter = 0;
-        is_Bonus = true;
-    }
+
     public void OnBonusEnd() {
-        rb.velocity = new Vector3(0, start_velocity * -1, 0);
+        rb.velocity = new Vector3(0, start_velocity, 0);
         is_Bonus = false;
     }
     public void OnGameStart() {
         Health = 3;
         is_Bonus = false;
         is_round_start = true;
-        InitExecutor();
+        InitPrisoner();
     }
     public void OnGameEnd() {
         is_Bonus = false;
         is_round_start = false;
     }
 
-    public void OnRoundStart() {
-        is_Bonus = false;
-        is_round_start = true;
-        InitExecutor();
-    }
     public void OnRoundEnd() {
         //Curtain close
         is_Bonus = false;
