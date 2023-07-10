@@ -16,7 +16,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Cloth
   - 
   - 
   - 
@@ -45,4 +45,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 260002695
+    locked: 0
+  - name: Cloth
+    uniqueID: 631311599
+    locked: 0
+  - name: Video
+    uniqueID: 249653827
     locked: 0

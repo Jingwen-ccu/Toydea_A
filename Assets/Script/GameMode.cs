@@ -27,6 +27,12 @@ public class GameMode : MonoBehaviour
     float Steps;  // 需要移動的次數
     float StepDistance;  // 每次移動的距離
 
+    //Function: Video
+    public GameObject Camera_Video;
+    public GameObject RightVideo;
+    public GameObject LeftVideo;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +53,14 @@ public class GameMode : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.W))
         {
             CloseCloth();
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            PlayVideo();
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            StopVideo();
         }
     }
 
@@ -86,6 +100,18 @@ public class GameMode : MonoBehaviour
     void CloseCloth()
     {
         StartCoroutine(ClosingCloth());
+    }
+
+    void PlayVideo()
+    {
+        Camera_Video.SetActive(true);
+        RightVideo.SetActive(true);
+    }
+
+    void StopVideo()
+    {
+        Camera_Video.SetActive(false);
+        RightVideo.SetActive(false);
     }
 
     //當擊中目標時呼叫
