@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Prisoner
   - Executor
+  - Map
+  - UpDownWall
+  - LeftRightWall
   layers:
   - Default
   - TransparentFX
