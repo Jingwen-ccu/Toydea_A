@@ -26,6 +26,9 @@ public class GameMode : MonoBehaviour
     float Interval = 0.02f;  // 每次移動的間隔時間
     float Steps;  // 需要移動的次數
     float StepDistance;  // 每次移動的距離
+    bool isSuccessClose = false;
+    bool isSuccessOpen = false;
+
 
     //Function: Video
     public GameObject Camera_Video;
@@ -58,6 +61,7 @@ public class GameMode : MonoBehaviour
         {
             CloseCloth();
         }
+        
         else if (Input.GetKeyDown(KeyCode.E))
         {
             PlayVideo(true);
@@ -70,6 +74,7 @@ public class GameMode : MonoBehaviour
         {
             StopVideo();
         }
+        
     }
 
     void GameStart()
@@ -77,9 +82,13 @@ public class GameMode : MonoBehaviour
 
     }
 
+    //遊戲重新開始
     void GameInitiate()
     {
-
+        //開布幕
+        OpenCloth();
+        //遊戲暫停
+        Time.timeScale = 1f;
     }
 
 
@@ -87,10 +96,14 @@ public class GameMode : MonoBehaviour
     public void HitPlayer(bool isHitRight)
     {
 
-        //遊戲暫停
-        Time.timeScale = 0f;
         //血量UI更新
         UpdateHealth();
+
+        //遊戲暫停
+        Time.timeScale = 0f;
+
+        
+
         //Check遊戲結束了嗎
 
         //是：Call GameOver(int Winner)
@@ -107,19 +120,11 @@ public class GameMode : MonoBehaviour
         }
     }
 
-    void GameTurnRound(bool isHitRight)
+
+    //轉場
+    void GameTurnRound(bool isHitRight) 
     {
-        CloseCloth();
-
-        if (isHitRight)
-        {
-            PlayVideo(false);
-        }
-        else
-        {
-            PlayVideo(true);
-
-        }
+        StartCoroutine(PlayShortVideo(isHitRight));
 
     }
 
@@ -173,6 +178,7 @@ public class GameMode : MonoBehaviour
 
     IEnumerator OpeningCloth()
     {
+        isSuccessOpen = false;
         float CurrentDistance = 0;
 
         while (CurrentDistance < TargetDistance)
@@ -181,12 +187,16 @@ public class GameMode : MonoBehaviour
             RightCloth.transform.position += new Vector3(StepDistance, 0, 0);
             CurrentDistance += StepDistance;
             //Debug.Log("Step");
-            yield return new WaitForSeconds(Interval);
+            yield return new WaitForSecondsRealtime(Interval);
         }
+
+        isSuccessOpen = true;
     }
 
     IEnumerator ClosingCloth()
     {
+
+        isSuccessClose = false;
         float CurrentDistance = 0;
 
         while (CurrentDistance < TargetDistance)
@@ -195,8 +205,10 @@ public class GameMode : MonoBehaviour
             RightCloth.transform.position -= new Vector3(StepDistance, 0, 0);
             CurrentDistance += StepDistance;
             //Debug.Log("Close");
-            yield return new WaitForSeconds(Interval);
+            yield return new WaitForSecondsRealtime(Interval);
         }
+
+        isSuccessClose = true;
     }
 
     IEnumerator StartCountdown()
@@ -209,5 +221,31 @@ public class GameMode : MonoBehaviour
         }
 
         Debug.Log("Time out");
+    }
+
+    IEnumerator PlayShortVideo(bool isHitRight)
+    {
+        //Debug.Log("PLAY video");
+        //關布幕
+        CloseCloth();
+        yield return new WaitForSecondsRealtime(Duration+0.2f);
+
+
+        if (isHitRight)
+        {
+            PlayVideo(false);
+        }
+        else
+        {
+            PlayVideo(true);
+
+        }
+
+        yield return new WaitForSecondsRealtime(1.3f);
+        //Debug.Log("stop video");
+        StopVideo();
+        GameInitiate();
+       
+       
     }
 }
