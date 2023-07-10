@@ -1,21 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameMode : MonoBehaviour
 {
-    public int PlayerLeftHealth;
-    public int PlayerRightHealth;
-    public GameObject PlayerLeft; //之後會改為Script_Controller
-    public GameObject PlayerRight; //之後會改為Script_Controller
 
+    public ExecutorController PlayerLeft; //之後會改為Script_Controller
+    public PrisonerController PlayerRight; //之後會改為Script_Controller
+
+    //Function: Timer
+    private float WorldTime = 120f;
+    public Text Time;
+
+    //Function: Health
+    public Text LHealth;
+    public Text RHealth;
+
+
+    //Function: Cloth
     public GameObject LeftCloth;
     public GameObject RightCloth;
-    /*
-    private float TargetDistance = 500f;
-    private float StepDistance = 1000f;
-    private float CurrentDistance = 0f;
-    */
     float TargetDistance = 20f;
     float Duration = 1f;  // 總共移動的時間
     float Interval = 0.02f;  // 每次移動的間隔時間
@@ -28,6 +33,8 @@ public class GameMode : MonoBehaviour
         Steps = Duration / Interval;
         StepDistance = TargetDistance / Steps;
         OpenCloth();
+
+        StartCoroutine(StartCountdown());
     }
 
     // Update is called once per frame
@@ -81,22 +88,14 @@ public class GameMode : MonoBehaviour
         StartCoroutine(ClosingCloth());
     }
 
-    /*
-    IEnumerator OpeningCloth()
+    //當擊中目標時呼叫
+    void UpdateHealth()
     {
-        float CurrentDistance = 0;
-
-        while (CurrentDistance < TargetDistance)
-        {
-            LeftCloth.transform.position -= new Vector3(StepDistance, 0, 0) * Time.deltaTime;
-            RightCloth.transform.position += new Vector3(StepDistance, 0, 0) * Time.deltaTime;
-            CurrentDistance += StepDistance * Time.deltaTime;
-            Debug.Log("Step");
-            yield return new WaitForSeconds(0.05f);
-        }
-
+        LHealth.text = PlayerLeft.Health.ToString();
+        RHealth.text = PlayerRight.Health.ToString();
     }
-    */
+
+
     IEnumerator OpeningCloth()
     {
         float CurrentDistance = 0;
@@ -123,5 +122,17 @@ public class GameMode : MonoBehaviour
             //Debug.Log("Close");
             yield return new WaitForSeconds(Interval);
         }
+    }
+
+    IEnumerator StartCountdown()
+    {
+        while (WorldTime > 0)
+        {
+            yield return new WaitForSeconds(1);
+            WorldTime--;
+            Time.text = WorldTime.ToString();
+        }
+
+        Debug.Log("Time out");
     }
 }

@@ -10,7 +10,7 @@ public class PrisonerController : MonoBehaviour {
     private float acceration;
     private float decend;
     private float multiplier = 2;
-    private float Health = 3;
+    public float Health = 3;
     void Start() {
         acceration = multiplier * 2;
         decend = multiplier;

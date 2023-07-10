@@ -10,7 +10,7 @@ public class ExecutorController : MonoBehaviour {
     private float acceration;
     private float decend;
     private float multiplier = 2;
-    private float Health = 3;
+    public float Health = 3;
     private int magazine;
     void Start() {
         acceration = multiplier * 2;
