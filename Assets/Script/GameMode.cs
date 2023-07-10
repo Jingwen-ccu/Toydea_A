@@ -11,7 +11,7 @@ public class GameMode : MonoBehaviour
 
     //Function: Timer
     private float WorldTime = 120f;
-    public Text Time;
+    public Text Times;
 
     //Function: Health
     public Text LHealth;
@@ -36,9 +36,13 @@ public class GameMode : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        //前置作業
         Steps = Duration / Interval;
         StepDistance = TargetDistance / Steps;
+        
         OpenCloth();
+
 
         StartCoroutine(StartCountdown());
     }
@@ -80,13 +84,42 @@ public class GameMode : MonoBehaviour
 
 
     //When Hit Somebody
-    void HitPlayer()
+    public void HitPlayer(bool isHitRight)
     {
 
+        //遊戲暫停
+        Time.timeScale = 0f;
+        //血量UI更新
+        UpdateHealth();
+        //Check遊戲結束了嗎
+
+        //是：Call GameOver(int Winner)
+
+        //不是：Call GameTurnRound()
+        if (isHitRight)
+        {
+            GameTurnRound(true);
+        }
+        else
+        {
+            GameTurnRound(false);
+
+        }
     }
 
-    void GameTurnRound()
+    void GameTurnRound(bool isHitRight)
     {
+        CloseCloth();
+
+        if (isHitRight)
+        {
+            PlayVideo(false);
+        }
+        else
+        {
+            PlayVideo(true);
+
+        }
 
     }
 
@@ -172,7 +205,7 @@ public class GameMode : MonoBehaviour
         {
             yield return new WaitForSeconds(1);
             WorldTime--;
-            Time.text = WorldTime.ToString();
+            Times.text = WorldTime.ToString();
         }
 
         Debug.Log("Time out");

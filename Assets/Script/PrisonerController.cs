@@ -11,6 +11,11 @@ public class PrisonerController : MonoBehaviour {
     private float decend;
     private float multiplier = 2;
     public float Health = 3;
+
+
+    //JingWem Add
+    public GameMode GM;
+
     void Start() {
         acceration = multiplier * 2;
         decend = multiplier;
@@ -49,6 +54,8 @@ public class PrisonerController : MonoBehaviour {
     }
     public void OnHit() {
         Health--;
+        GM.HitPlayer(true);
+
         Debug.Log(Health);
         if(Health == 0) {
             Destroy(gameObject);

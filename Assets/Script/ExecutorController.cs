@@ -12,6 +12,12 @@ public class ExecutorController : MonoBehaviour {
     private float multiplier = 2;
     public float Health = 3;
     private int magazine;
+
+    //JingWem Add
+    public GameMode GM;
+  
+
+
     void Start() {
         acceration = multiplier * 2;
         decend = multiplier;
@@ -50,6 +56,10 @@ public class ExecutorController : MonoBehaviour {
     }
     public void OnHit() {
         Health--;
+
+        //JingWen Add
+        GM.HitPlayer(false);
+
         //Debug.Log(Health);
         if(Health == 0) {
             Destroy(gameObject);
