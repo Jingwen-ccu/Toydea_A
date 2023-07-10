@@ -56,9 +56,13 @@ public class GameMode : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
-            PlayVideo();
+            PlayVideo(true);
         }
         else if (Input.GetKeyDown(KeyCode.R))
+        {
+            PlayVideo(false);
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
         {
             StopVideo();
         }
@@ -102,16 +106,28 @@ public class GameMode : MonoBehaviour
         StartCoroutine(ClosingCloth());
     }
 
-    void PlayVideo()
+    void PlayVideo(bool isRightWin)
     {
         Camera_Video.SetActive(true);
-        RightVideo.SetActive(true);
+
+        if(isRightWin)
+        {
+            LeftVideo.SetActive(false);
+            RightVideo.SetActive(true);
+        }
+        else
+        {
+            LeftVideo.SetActive(true);
+            RightVideo.SetActive(false);
+        }
+        
     }
 
     void StopVideo()
     {
         Camera_Video.SetActive(false);
         RightVideo.SetActive(false);
+        LeftVideo.SetActive(false);
     }
 
     //當擊中目標時呼叫
