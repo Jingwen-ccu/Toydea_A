@@ -62,6 +62,9 @@ public class PrisonerController : MonoBehaviour {
             OnGameStart();
         }
     }
+    public void InitPrisonerPos() {
+
+    }
     public void OnGameStart() {
 
     }

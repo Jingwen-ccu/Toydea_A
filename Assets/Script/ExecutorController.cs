@@ -66,6 +66,9 @@ public class ExecutorController : MonoBehaviour {
             Destroy(gameObject);
         }
     }
+    public void InitPrisonerPos() {
+
+    }
     public void OnBonusStart() {
         rb.velocity = new Vector3(0, 0, 0);
         transform.position = new Vector2(transform.position.x, 0);

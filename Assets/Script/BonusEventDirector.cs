@@ -27,8 +27,7 @@ public class BonusEventDirector : MonoBehaviour {
     }
     public void OnBonusStart() {
         isBonus = true;
-        bullets = GameObject.FindGameObjectsWithTag("Bullet");
-        foreach(GameObject bullet in bullets) Destroy(bullet); //desstroy bullet
+        BulletsWipe();
         prisoner.transform.position = new Vector2(prisoner.transform.position.x, 0);
         executor.transform.position = new Vector2(executor.transform.position.x, 0);
         /*
@@ -40,6 +39,11 @@ public class BonusEventDirector : MonoBehaviour {
         }
         */
 
+    }
+    public void BulletsWipe() {
+
+        bullets = GameObject.FindGameObjectsWithTag("Bullet");
+        foreach(GameObject bullet in bullets) Destroy(bullet); //desstroy bullet
     }
     // Update is called once per frame
 
