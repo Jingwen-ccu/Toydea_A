@@ -1,8 +1,8 @@
 using UnityEngine;
 
 public class ExecutorController : MonoBehaviour {
-    private bool is_round_start = true;
-    private bool is_Bonus = false;
+    public bool is_round_start = true;
+    public bool is_Bonus = false;
     private float final_velocity;
     private float velocity = 200;
     private float start_velocity;
@@ -12,7 +12,7 @@ public class ExecutorController : MonoBehaviour {
     private float decend;
     private float multiplier = 2;
     public float Health = 3;
-    private int magazine;
+    public int click_counter;
 
     //JingWem Add
     public GameMode GM;
@@ -27,10 +27,20 @@ public class ExecutorController : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = new Vector3(0, start_velocity, 0);
         Health = 3;
-        magazine = 3;
     }
 
     void Update() {
+        if(is_Bonus) { // Bonus time
+            if(Input.GetKeyDown(KeyCode.A)) {
+                click_counter++;
+            }
+        } else {
+            ExecutorMovement();
+            lastVelocity = rb.velocity;
+        }
+
+    }
+    private void ExecutorMovement() {
         if(Input.GetKey(KeyCode.A)) {
             if(rb.velocity.y <= final_velocity && rb.velocity.y > 0) {
                 rb.AddForce(new Vector2(0, velocity * acceration * Time.deltaTime));
@@ -45,9 +55,6 @@ public class ExecutorController : MonoBehaviour {
                 rb.AddForce(new Vector2(0, decend));
             }
         }
-
-
-        lastVelocity = rb.velocity;
     }
     private void OnCollisionEnter2D(Collision2D collision) {
         //Reflect if Wall has been touched
@@ -72,9 +79,13 @@ public class ExecutorController : MonoBehaviour {
     public void OnBonusStart() {
         rb.velocity = new Vector3(0, 0, 0);
         transform.position = new Vector2(transform.position.x, 0);
+
+        click_counter = 0;
+        is_Bonus = true;
     }
     public void OnBonusEnd() {
         rb.velocity = new Vector3(0, start_velocity, 0);
+        is_Bonus = false;
     }
     public void OnGameStart() {
         Health = 3;

@@ -1,7 +1,8 @@
 using UnityEngine;
 
 public class PrisonerController : MonoBehaviour {
-    private bool is_round_start = true;
+    public bool is_round_start = true;
+    public bool is_Bonus = false;
     private float final_velocity;
     private float velocity = 200;
     private float start_velocity;
@@ -11,12 +12,15 @@ public class PrisonerController : MonoBehaviour {
     private float decend;
     private float multiplier = 2;
     public float Health = 3;
+    public int click_counter;
 
 
     //JingWem Add
     public GameMode GM;
 
     void Start() {
+
+        is_Bonus = false;
         acceration = multiplier * 2;
         decend = multiplier;
         start_velocity = velocity / 100 * multiplier;
@@ -27,6 +31,17 @@ public class PrisonerController : MonoBehaviour {
     }
 
     void Update() {
+        if(is_Bonus) {//Bonus time
+            if(Input.GetKeyDown(KeyCode.P)) {
+                click_counter++;
+            }
+        } else {
+            PrisonerMovement();
+            lastVelocity = rb.velocity;
+        }
+
+    }
+    private void PrisonerMovement() {
         if(Input.GetKey(KeyCode.P)) {
             if(rb.velocity.y <= final_velocity && rb.velocity.y > 0) {
                 rb.AddForce(new Vector2(0, velocity * acceration * Time.deltaTime));
@@ -40,11 +55,6 @@ public class PrisonerController : MonoBehaviour {
                 rb.AddForce(new Vector2(0, decend));
             }
         }
-
-
-
-
-        lastVelocity = rb.velocity;
     }
     private void OnCollisionEnter2D(Collision2D collision) {
         //Reflect if Wall has been touched
@@ -65,17 +75,33 @@ public class PrisonerController : MonoBehaviour {
     public void InitPrisonerPos() {
 
     }
+    public void OnBonusStart() {
+        rb.velocity = new Vector3(0, 0, 0);
+        transform.position = new Vector2(transform.position.x, 0);
+        click_counter = 0;
+        is_Bonus = true;
+    }
+    public void OnBonusEnd() {
+        rb.velocity = new Vector3(0, start_velocity, 0);
+        is_Bonus = false;
+    }
     public void OnGameStart() {
-
+        Health = 3;
+        is_Bonus = false;
+        is_round_start = true;
     }
     public void OnGameEnd() {
-
+        is_Bonus = false;
+        is_round_start = false;
     }
+
     public void OnRoundStart() {
-
+        is_Bonus = false;
+        is_round_start = true;
     }
-
     public void OnRoundEnd() {
         //Curtain close
+        is_Bonus = false;
+        is_round_start = false;
     }
 }

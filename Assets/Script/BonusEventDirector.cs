@@ -8,6 +8,7 @@ public class BonusEventDirector : MonoBehaviour {
     public GameObject executor;
     public PrisonerController prisonerController;
     public ExecutorController executorController;
+    public BonusRemainingTime bonusRemainingTime;
     private void Start() {
         isBonus = false;
         bonus_timetrigger = 0;
@@ -16,7 +17,7 @@ public class BonusEventDirector : MonoBehaviour {
     }
     private void Update() {
         if(isBonus) {
-            return;
+            OnBonus();
         } else {
             bonus_timetrigger += Time.deltaTime;
             if(bonus_timetrigger > 1) {
@@ -28,8 +29,9 @@ public class BonusEventDirector : MonoBehaviour {
     public void OnBonusStart() {
         isBonus = true;
         BulletsWipe();
-        prisoner.transform.position = new Vector2(prisoner.transform.position.x, 0);
-        executor.transform.position = new Vector2(executor.transform.position.x, 0);
+        bonusRemainingTime.StartTimer();
+        prisonerController.OnBonusStart();
+        executorController.OnBonusStart();
         /*
         int bonus_dice = Random.Range(1, 3);
                 switch(bonus_dice) {
@@ -39,6 +41,21 @@ public class BonusEventDirector : MonoBehaviour {
         }
         */
 
+    }
+    public void OnBonus() {
+        if(!bonusRemainingTime.IsNotOver) { OnBonusEnd(); return; }
+    }
+    public void OnBonusEnd() {
+        isBonus = false;
+        if(prisonerController.click_counter < executorController.click_counter) { // executor win the bonus
+            Debug.Log("Executor gets bonus!");
+        } else if(prisonerController.click_counter > executorController.click_counter) { // prisoner win the bonus
+            Debug.Log("Prisoner gets bonus!");
+        } else {// equal -> no one win
+            Debug.Log("Nobody get bonus :( !");
+        }
+        prisonerController.OnBonusEnd();
+        executorController.OnBonusEnd();
     }
     public void BulletsWipe() {
 
