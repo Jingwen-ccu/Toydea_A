@@ -50,7 +50,7 @@ public class ExecutorController : MonoBehaviour {
     }
     public void OnHit() {
         Health--;
-        Debug.Log(Health);
+        //Debug.Log(Health);
         if(Health == 0) {
             Destroy(gameObject);
         }

@@ -18,7 +18,7 @@ public class RightBulletController : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.gameObject.name == "Executor") {
             Destroy(gameObject);
-            Debug.Log("Hit Prisoner");
+            //Debug.Log("Hit Prisoner");
             ExecutorController.OnHit();
             ExecutorController.OnRoundEnd();
         }
