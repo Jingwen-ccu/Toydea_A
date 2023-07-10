@@ -85,8 +85,7 @@ public class GameMode : MonoBehaviour
     //遊戲重新開始
     void GameInitiate()
     {
-        //開布幕
-        OpenCloth();
+  
         //遊戲暫停
         Time.timeScale = 1f;
     }
@@ -98,6 +97,8 @@ public class GameMode : MonoBehaviour
 
         //血量UI更新
         UpdateHealth();
+
+        //初始化玩家
 
         //遊戲暫停
         Time.timeScale = 0f;
@@ -226,9 +227,8 @@ public class GameMode : MonoBehaviour
     IEnumerator PlayShortVideo(bool isHitRight)
     {
         //Debug.Log("PLAY video");
-        //關布幕
-        CloseCloth();
-        yield return new WaitForSecondsRealtime(Duration+0.2f);
+        
+       
 
 
         if (isHitRight)
@@ -244,8 +244,13 @@ public class GameMode : MonoBehaviour
         yield return new WaitForSecondsRealtime(1.3f);
         //Debug.Log("stop video");
         StopVideo();
+
+        //關布幕
+        CloseCloth();
+        yield return new WaitForSecondsRealtime(Duration + 0.2f);
+        OpenCloth();
+
+        
         GameInitiate();
-       
-       
     }
 }
