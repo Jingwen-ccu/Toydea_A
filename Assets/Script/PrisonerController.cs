@@ -12,13 +12,10 @@ public class PrisonerController : MonoBehaviour {
     public float Health = 3;
     public int click_counter;
 
-    public BonusBuffController bonusBuffController;
+    public Animator blood;
+    public Animator death;
+    //public BonusBuffController bonusBuffController;
     public GameMode GM;
-
-    
-
-
-
 
     void Start() {
 
@@ -63,7 +60,6 @@ public class PrisonerController : MonoBehaviour {
     public void OnHit() {
         Health--;
         GM.HitPlayer(true);
-
         Debug.Log(Health);
         if(Health == 0) {
             //Destroy(gameObject);
@@ -108,5 +104,5 @@ public class PrisonerController : MonoBehaviour {
     }
 
 
-    
+
 }

@@ -9,6 +9,8 @@ TagManager:
   - Map
   - UpDownWall
   - LeftRightWall
+  - Bullet
+  - CameraController
   layers:
   - Default
   - TransparentFX

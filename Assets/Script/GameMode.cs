@@ -6,6 +6,11 @@ public class GameMode : MonoBehaviour {
 
     public ExecutorController PlayerLeft; //之後會改為Script_Controller
     public PrisonerController PlayerRight; //之後會改為Script_Controller
+    public CameraController CameraController;
+    public GameObject LeftBlood;
+    public GameObject RightBlood;
+    public GameObject LeftDeathBlood;
+    public GameObject RightDeathBlood;
 
     //Contents
     public GameObject ContentsUI;
@@ -13,6 +18,7 @@ public class GameMode : MonoBehaviour {
 
     //Function: Timer
     private float WorldTime = 120f;
+    private float HightlightTime = 2f;
     public Text Times;
     Coroutine TimerCoroutine;
 
@@ -35,7 +41,7 @@ public class GameMode : MonoBehaviour {
     public GameObject LPlayerBoard;
     public GameObject RPlayerBoard;
 
-    
+
 
 
     //Function: Video
@@ -86,12 +92,11 @@ public class GameMode : MonoBehaviour {
 
         Script_Music.Music_Contents();
 
-        
+
     }
 
     // Update is called once per frame
-    void Update() 
-    {
+    void Update() {
         /*
         if(Input.GetKeyDown(KeyCode.Q)) {
             OpenCloth();
@@ -108,14 +113,13 @@ public class GameMode : MonoBehaviour {
 
     }
 
-    void GameStart() 
-    {
+    void GameStart() {
 
 
 
         Time.timeScale = 1f;
         WorldTime = 120f;
-        
+
 
         //PlayerLeft.OnBonusStart();
         //PlayerRight.OnGameStart();
@@ -143,12 +147,11 @@ public class GameMode : MonoBehaviour {
     }
 
     //遊戲重新開始
-    void GameInitiate() 
-    {
+    void GameInitiate() {
 
         //遊戲開始
         //Time.timeScale = 1f;
-
+        CameraController.InitCamera();
         executorController.OnRoundStart();
         prisonerController.OnRoundStart();
         BulletsWipe();
@@ -165,31 +168,21 @@ public class GameMode : MonoBehaviour {
         //血量UI更新
         UpdateHealth();
 
-        //初始化位置子彈
-        GameInitiate();
 
-        //遊戲暫停
-        Time.timeScale = 0f;
 
         //Check遊戲結束了嗎
         //是：Call GameOver(int Winner)
-        if (PlayerLeft.Health==0)
-        {
+        if(PlayerLeft.Health == 0) {
             StartCoroutine(GameOver(1)); //winner：right
             return;
-        }
-        else if(PlayerRight.Health==0)
-        {
+        } else if(PlayerRight.Health == 0) {
             StartCoroutine(GameOver(0)); //winner：left
             return;
         }
         //不是：Call GameTurnRound()
-        if(isHitRight) 
-        {
+        if(isHitRight) {
             GameTurnRound(true);
-        } 
-        else 
-        {
+        } else {
             GameTurnRound(false);
 
         }
@@ -197,34 +190,42 @@ public class GameMode : MonoBehaviour {
 
 
     //轉場
-    void GameTurnRound(bool isHitRight) 
-    {
+    void GameTurnRound(bool isHitRight) {
         StartCoroutine(PlayShortVideo(isHitRight));
         //Woose Added: Call round start method
 
-        
+
 
     }
 
-    IEnumerator GameOver(int Winner) 
-    {
+    IEnumerator GameOver(int Winner) {
+        Time.timeScale = 0.3875f;
+        if(Winner == 0) {
+            RightBlood.SetActive(true);
+            RightBlood.GetComponent<Animator>().Play("bloodRight");
+        } else {
+            LeftBlood.SetActive(true);
+            LeftBlood.GetComponent<Animator>().Play("bloodLeft");
+        }
+        yield return new WaitForSecondsRealtime(HightlightTime);
+        RightBlood.SetActive(false);
+        LeftBlood.SetActive(false);
+        //遊戲暫停
+        Time.timeScale = 0f;
         CloseCloth();
-       
+
         yield return new WaitForSecondsRealtime(Duration + 0.2f);
         WorldTime = 120f;
         Times.text = "120";
         StopCoroutine(TimerCoroutine);
         TimerCoroutine = null;
-        
 
-        if (Winner == 0)
-        {
+
+        if(Winner == 0) {
             LeftWinnerCG.SetActive(true);
             Script_Music.UnMusic_Fighting();
             Script_Music.Music_LWinner();
-        }
-        else if (Winner == 1)
-        {
+        } else if(Winner == 1) {
             RightWinnerCG.SetActive(true);
             Script_Music.UnMusic_Fighting();
             Script_Music.Music_RWinner();
@@ -235,7 +236,9 @@ public class GameMode : MonoBehaviour {
         LPlayerBoard.SetActive(true);
         RPlayerBoard.SetActive(true);
         CloseCloth();
-        
+
+        //初始化位置子彈
+        GameInitiate();
         yield return new WaitForSecondsRealtime(Duration + 0.2f);
 
         RightWinnerCG.SetActive(false);
@@ -245,17 +248,16 @@ public class GameMode : MonoBehaviour {
 
         Script_Music.UnMusic_LWinner();
         Script_Music.UnMusic_RWinner();
-        
+
         Script_Music.Music_Contents();
 
-        
+
 
     }
 
 
     //Woose Added Delete Bullet
-    public void BulletsWipe() 
-    {
+    public void BulletsWipe() {
 
         GameObject[] bullets;
         bullets = GameObject.FindGameObjectsWithTag("Bullet");
@@ -285,64 +287,59 @@ public class GameMode : MonoBehaviour {
 
     }
 
-    void StopVideo() 
-    {
+    void StopVideo() {
         Camera_Video.SetActive(false);
         RightVideo.SetActive(false);
         LeftVideo.SetActive(false);
     }
 
     //當擊中目標時呼叫
-    void UpdateHealth() 
-    {
+    void UpdateHealth() {
         LHealth1.SetActive(false);
         LHealth2.SetActive(false);
         LHealth3.SetActive(false);
-        switch(PlayerLeft.Health)
-        {
-            case 0:
-                break;
-            case 1:
-                LHealth1.SetActive(true);
-                break;
-            case 2:
-                LHealth1.SetActive(true);
-                LHealth2.SetActive(true);
-                break;
-            case 3:
-                LHealth1.SetActive(true);
-                LHealth2.SetActive(true);
-                LHealth3.SetActive(true);
-                break;
+        switch(PlayerLeft.Health) {
+        case 0:
+        break;
+        case 1:
+        LHealth1.SetActive(true);
+        break;
+        case 2:
+        LHealth1.SetActive(true);
+        LHealth2.SetActive(true);
+        break;
+        case 3:
+        LHealth1.SetActive(true);
+        LHealth2.SetActive(true);
+        LHealth3.SetActive(true);
+        break;
         }
 
 
         RHealth1.SetActive(false);
         RHealth2.SetActive(false);
         RHealth3.SetActive(false);
-        switch (PlayerRight.Health)
-        {
-            case 0:
-                break;
-            case 1:
-                RHealth1.SetActive(true);
-                break;
-            case 2:
-                RHealth1.SetActive(true);
-                RHealth2.SetActive(true);
-                break;
-            case 3:
-                RHealth1.SetActive(true);
-                RHealth2.SetActive(true);
-                RHealth3.SetActive(true);
-                break;
+        switch(PlayerRight.Health) {
+        case 0:
+        break;
+        case 1:
+        RHealth1.SetActive(true);
+        break;
+        case 2:
+        RHealth1.SetActive(true);
+        RHealth2.SetActive(true);
+        break;
+        case 3:
+        RHealth1.SetActive(true);
+        RHealth2.SetActive(true);
+        RHealth3.SetActive(true);
+        break;
         }
 
     }
 
 
-    IEnumerator OpeningCloth() 
-    {
+    IEnumerator OpeningCloth() {
         if(isClose == false) //安全檢查
         {
             yield break;
@@ -359,13 +356,12 @@ public class GameMode : MonoBehaviour {
             yield return new WaitForSecondsRealtime(Interval);
         }
 
-        
-        
+
+
     }
 
-    IEnumerator ClosingCloth() 
-    {
-        if (isClose == true) //安全檢查
+    IEnumerator ClosingCloth() {
+        if(isClose == true) //安全檢查
         {
             yield break;
         }
@@ -381,7 +377,7 @@ public class GameMode : MonoBehaviour {
             //Debug.Log("Close");
             yield return new WaitForSecondsRealtime(Interval);
         }
-        
+
         //isSuccessClose = true;
     }
 
@@ -395,12 +391,26 @@ public class GameMode : MonoBehaviour {
         Debug.Log("Time out");
     }
 
-    IEnumerator PlayShortVideo(bool isHitRight) 
-    {
+    IEnumerator PlayShortVideo(bool isHitRight) {
+
+
         //Debug.Log("PLAY video");
 
-        if(isHitRight) 
-        {
+        Time.timeScale = 0.3875f;
+        if(isHitRight) {
+            RightBlood.SetActive(true);
+            RightBlood.GetComponent<Animator>().Play("bloodRight");
+        } else {
+            LeftBlood.SetActive(true);
+            LeftBlood.GetComponent<Animator>().Play("bloodLeft");
+        }
+        yield return new WaitForSecondsRealtime(HightlightTime);
+        RightBlood.SetActive(false);
+        LeftBlood.SetActive(false);
+        //遊戲暫停
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(1.3f);
+        if(isHitRight) {
             PlayVideo(false);
         } else {
             PlayVideo(true);
@@ -414,6 +424,9 @@ public class GameMode : MonoBehaviour {
         //關布幕
         CloseCloth();
         Debug.Log("CCCCCCCC");
+
+        //初始化位置子彈
+        GameInitiate();
         yield return new WaitForSecondsRealtime(Duration + 0.2f);
         OpenCloth();
 
@@ -429,9 +442,8 @@ public class GameMode : MonoBehaviour {
     }
 
 
-    IEnumerator WaitHidePlayerBoard()
-    {
-        
+    IEnumerator WaitHidePlayerBoard() {
+
         yield return new WaitForSecondsRealtime(1f);
         LPlayerBoard.SetActive(false);
         RPlayerBoard.SetActive(false);
@@ -459,14 +471,12 @@ public class GameMode : MonoBehaviour {
     }
     */
 
-    void BackContents()
-    {
+    void BackContents() {
         ContentsUI.SetActive(true);
-        
+
     }
 
-    IEnumerator PlayOpeningAnimation()
-    {
+    IEnumerator PlayOpeningAnimation() {
         Time.timeScale = 0f;
         OpenCloth();
 
@@ -502,33 +512,29 @@ public class GameMode : MonoBehaviour {
         OpeningCG3.SetActive(false);
         OpeningCG4.SetActive(false);
 
-        
+
         GameStart();
     }
 
-    public void StartPlay()
-    {
+    public void StartPlay() {
         Script_Music.UnMusic_Contents();
         Script_Music.Music_Fighting();
         StartCoroutine(PlayOpeningAnimation());
     }
 
-    IEnumerator DelayScream()
-    {
+    IEnumerator DelayScream() {
 
         yield return new WaitForSecondsRealtime(0.5f);
         Script_Music.Music_Scream();
     }
 
-    IEnumerator CloseAndOpenCloth()
-    {
+    IEnumerator CloseAndOpenCloth() {
         CloseCloth();
         yield return new WaitForSecondsRealtime(Duration + 0.2f);
         OpenCloth();
     }
 
-    public void CloseAndOpen()
-    {
+    public void CloseAndOpen() {
         StartCoroutine(CloseAndOpenCloth());
     }
 

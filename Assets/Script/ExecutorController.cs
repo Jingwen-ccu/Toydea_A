@@ -12,9 +12,9 @@ public class ExecutorController : MonoBehaviour {
     public float Health = 3;
     public int click_counter;
 
-
-    public BonusBuffController bonusBuffController;
-    //JingWem Add
+    public Animator blood;
+    public Animator death;
+    //public BonusBuffController bonusBuffController;
     public GameMode GM;
 
     //Bullet
@@ -65,14 +65,13 @@ public class ExecutorController : MonoBehaviour {
     }
     public void OnHit() {
         Health--;
-
-        //JingWen Add
         GM.HitPlayer(false);
 
         //Debug.Log(Health);
         if(Health == 0) {
-            //Destroy(gameObject);
             OnGameStart();
+        } else {
+
         }
     }
     public void InitExecutor() {
