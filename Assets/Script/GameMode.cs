@@ -7,6 +7,10 @@ public class GameMode : MonoBehaviour {
     public ExecutorController PlayerLeft; //之後會改為Script_Controller
     public PrisonerController PlayerRight; //之後會改為Script_Controller
 
+    //Contents
+    public GameObject ContentsUI;
+    //bool isContents = true;
+
     //Function: Timer
     private float WorldTime = 120f;
     public Text Times;
@@ -41,6 +45,11 @@ public class GameMode : MonoBehaviour {
     public PrisonerController prisonerController;
 
 
+    //GameOver
+    public GameObject LeftWinnerCG;
+    public GameObject RightWinnerCG;
+
+
     // Start is called before the first frame update
     void Start() {
 
@@ -48,11 +57,7 @@ public class GameMode : MonoBehaviour {
         Steps = Duration / Interval;
         StepDistance = TargetDistance / Steps;
 
-        //打開Cloth
-        OpenCloth();
-
-        //開始計時
-        StartCoroutine(StartCountdown());
+        GameStart();
     }
 
     // Update is called once per frame
@@ -71,12 +76,26 @@ public class GameMode : MonoBehaviour {
 
     }
 
-    void GameStart() {
+    void GameStart() 
+    {
+        ContentsUI.SetActive(false);
+        
+        //打開Cloth
+        OpenCloth();
+
+        
+
+        //開始計時
+        StartCoroutine(StartCountdown());
+
+        //關掉人物背板
+        StartCoroutine(WaitHidePlayerBoard());
 
     }
 
     //遊戲重新開始
-    void GameInitiate() {
+    void GameInitiate() 
+    {
 
         //遊戲開始
         //Time.timeScale = 1f;
@@ -105,11 +124,11 @@ public class GameMode : MonoBehaviour {
         //是：Call GameOver(int Winner)
         if (PlayerLeft.Health==0)
         {
-
+            GameOver(1); //winner：right
         }
         else if(PlayerRight.Health==0)
         {
-
+            GameOver(0); //winner：left
         }
         //不是：Call GameTurnRound()
         if(isHitRight) 
@@ -179,9 +198,9 @@ public class GameMode : MonoBehaviour {
     }
 
 
-    IEnumerator OpeningCloth() {
-        //isSuccessOpen = false;
-        if(isClose == false)
+    IEnumerator OpeningCloth() 
+    {
+        if(isClose == false) //安全檢查
         {
             yield break;
         }
@@ -203,12 +222,13 @@ public class GameMode : MonoBehaviour {
 
     IEnumerator ClosingCloth() 
     {
-        if (isClose == true)
+        if (isClose == true) //安全檢查
         {
             yield break;
         }
+
+
         isClose = true;
-        //isSuccessClose = false;
         float CurrentDistance = 0;
 
         while(CurrentDistance < TargetDistance) {
@@ -232,11 +252,9 @@ public class GameMode : MonoBehaviour {
         Debug.Log("Time out");
     }
 
-    IEnumerator PlayShortVideo(bool isHitRight) {
+    IEnumerator PlayShortVideo(bool isHitRight) 
+    {
         //Debug.Log("PLAY video");
-
-
-
 
         if(isHitRight) 
         {
@@ -256,10 +274,54 @@ public class GameMode : MonoBehaviour {
         OpenCloth();
 
 
-      
 
+        yield return new WaitForSecondsRealtime(0.9f);
 
         //遊戲開始
         Time.timeScale = 1f;
+    }
+
+
+    IEnumerator WaitHidePlayerBoard()
+    {
+        
+        yield return new WaitForSecondsRealtime(1f);
+        LPlayerBoard.SetActive(false);
+        RPlayerBoard.SetActive(false);
+    }
+
+    IEnumerator WaitShowPlayerBoard()
+    {
+        yield return new WaitForSecondsRealtime(1f);
+        LPlayerBoard.SetActive(true);
+        RPlayerBoard.SetActive(true);
+    }
+
+    IEnumerator GameOverCG(int Winner)
+    {
+        if(Winner == 0)
+        {
+            LeftWinnerCG.SetActive(true);
+        }
+        else if(Winner ==1)
+        {
+            RightWinnerCG.SetActive(true);
+        }
+
+
+        CloseCloth();
+        yield return new WaitForSecondsRealtime(Duration + 0.2f);
+        LeftWinnerCG.SetActive(false);
+        RightWinnerCG.SetActive(false);
+
+        BackContents();
+
+        
+    }
+
+    void BackContents()
+    {
+        ContentsUI.SetActive(true);
+        
     }
 }
