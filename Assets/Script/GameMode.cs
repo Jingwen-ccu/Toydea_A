@@ -24,14 +24,18 @@ public class GameMode : MonoBehaviour {
     float Interval = 0.02f;  // 每次移動的間隔時間
     float Steps;  // 需要移動的次數
     float StepDistance;  // 每次移動的距離
-    bool isSuccessClose = false;
-    bool isSuccessOpen = false;
+    bool isClose = true;
+    public GameObject LPlayerBoard;
+    public GameObject RPlayerBoard;
+
+    
 
 
     //Function: Video
     public GameObject Camera_Video;
     public GameObject RightVideo;
     public GameObject LeftVideo;
+
     //Woose Added: Call round start method
     public ExecutorController executorController;
     public PrisonerController prisonerController;
@@ -44,9 +48,10 @@ public class GameMode : MonoBehaviour {
         Steps = Duration / Interval;
         StepDistance = TargetDistance / Steps;
 
+        //打開Cloth
         OpenCloth();
 
-
+        //開始計時
         StartCoroutine(StartCountdown());
     }
 
@@ -73,8 +78,14 @@ public class GameMode : MonoBehaviour {
     //遊戲重新開始
     void GameInitiate() {
 
-        //遊戲暫停
-        Time.timeScale = 1f;
+        //遊戲開始
+        //Time.timeScale = 1f;
+
+        executorController.OnRoundStart();
+        prisonerController.OnRoundStart();
+        BulletsWipe();
+
+
     }
 
 
@@ -84,21 +95,29 @@ public class GameMode : MonoBehaviour {
         //血量UI更新
         UpdateHealth();
 
-        //初始化玩家
+        //初始化位置子彈
+        GameInitiate();
 
         //遊戲暫停
         Time.timeScale = 0f;
 
-
-
         //Check遊戲結束了嗎
-
         //是：Call GameOver(int Winner)
+        if (PlayerLeft.Health==0)
+        {
 
+        }
+        else if(PlayerRight.Health==0)
+        {
+
+        }
         //不是：Call GameTurnRound()
-        if(isHitRight) {
+        if(isHitRight) 
+        {
             GameTurnRound(true);
-        } else {
+        } 
+        else 
+        {
             GameTurnRound(false);
 
         }
@@ -106,19 +125,21 @@ public class GameMode : MonoBehaviour {
 
 
     //轉場
-    void GameTurnRound(bool isHitRight) {
+    void GameTurnRound(bool isHitRight) 
+    {
         StartCoroutine(PlayShortVideo(isHitRight));
         //Woose Added: Call round start method
-        executorController.OnRoundStart();
-        prisonerController.OnRoundStart();
-        BulletsWipe();
+        
     }
 
-    void GameOver(int Winner) {
+    void GameOver(int Winner) 
+    {
 
     }
     //Woose Added Delete Bullet
-    public void BulletsWipe() {
+    public void BulletsWipe() 
+    {
+
         GameObject[] bullets;
         bullets = GameObject.FindGameObjectsWithTag("Bullet");
         foreach(GameObject bullet in bullets) Destroy(bullet); //desstroy bullet
@@ -159,7 +180,13 @@ public class GameMode : MonoBehaviour {
 
 
     IEnumerator OpeningCloth() {
-        isSuccessOpen = false;
+        //isSuccessOpen = false;
+        if(isClose == false)
+        {
+            yield break;
+        }
+
+        isClose = false;
         float CurrentDistance = 0;
 
         while(CurrentDistance < TargetDistance) {
@@ -170,12 +197,18 @@ public class GameMode : MonoBehaviour {
             yield return new WaitForSecondsRealtime(Interval);
         }
 
-        isSuccessOpen = true;
+        
+        
     }
 
-    IEnumerator ClosingCloth() {
-
-        isSuccessClose = false;
+    IEnumerator ClosingCloth() 
+    {
+        if (isClose == true)
+        {
+            yield break;
+        }
+        isClose = true;
+        //isSuccessClose = false;
         float CurrentDistance = 0;
 
         while(CurrentDistance < TargetDistance) {
@@ -185,8 +218,8 @@ public class GameMode : MonoBehaviour {
             //Debug.Log("Close");
             yield return new WaitForSecondsRealtime(Interval);
         }
-
-        isSuccessClose = true;
+        
+        //isSuccessClose = true;
     }
 
     IEnumerator StartCountdown() {
@@ -205,7 +238,8 @@ public class GameMode : MonoBehaviour {
 
 
 
-        if(isHitRight) {
+        if(isHitRight) 
+        {
             PlayVideo(false);
         } else {
             PlayVideo(true);
@@ -222,6 +256,10 @@ public class GameMode : MonoBehaviour {
         OpenCloth();
 
 
-        GameInitiate();
+      
+
+
+        //遊戲開始
+        Time.timeScale = 1f;
     }
 }
