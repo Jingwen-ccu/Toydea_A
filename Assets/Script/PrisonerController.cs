@@ -15,7 +15,6 @@ public class PrisonerController : MonoBehaviour {
     public int click_counter;
 
     public BonusBuffController bonusBuffController;
-    //JingWem Add
     public GameMode GM;
 
     void Start() {

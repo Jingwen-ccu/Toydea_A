@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RightBulletController : MonoBehaviour {
 
-    private float deathWall = -10;
+    private float deathWall = -22;
 
     public ExecutorController ExecutorController;
     void Start() {

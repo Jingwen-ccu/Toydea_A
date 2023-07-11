@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class LeftBulletController : MonoBehaviour {
 
-    private float deathWall = 10;
+    private float deathWall = 22;
     public PrisonerController PrisonerController;
     void Start() {
         PrisonerController = GameObject.FindGameObjectWithTag("Prisoner").GetComponent<PrisonerController>();

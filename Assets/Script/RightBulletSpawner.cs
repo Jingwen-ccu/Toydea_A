@@ -3,7 +3,6 @@ using UnityEngine;
 public class RightBulletSpawner : MonoBehaviour {
     public GameObject RightBullet;
     public PrisonerCooldown prisonerCooldown;
-
     public bool isBonus;
     private int prisonerMagazine;
     // Start is called before the first frame update
