@@ -2259,7 +2259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RightBullet: {fileID: 2625945460725655595, guid: 1c0173192d45c724598dcfd2c0ba03a9, type: 3}
   prisonerCooldown:
-    cooldownTime: 3
+    cooldownTime: 2
   isBonus: 0
   music: {fileID: 1728598447}
   Weapon_R1: {fileID: 635830409}
@@ -4058,7 +4058,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftBullet: {fileID: 3986194342497657135, guid: 216c2d2ea54fe7a44b2b4c5532b87577, type: 3}
   executorCooldown:
-    cooldownTime: 3
+    cooldownTime: 2
   isBonus: 0
   music: {fileID: 1728598447}
   Weapon_R1: {fileID: 383652419}
