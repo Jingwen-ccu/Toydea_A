@@ -3,13 +3,14 @@ using UnityEngine;
 public class LeftBulletController : MonoBehaviour {
 
     private float deathWall = 22;
+    public float bulletspeed = 10.0f;
     public PrisonerController PrisonerController;
     void Start() {
         PrisonerController = GameObject.FindGameObjectWithTag("Prisoner").GetComponent<PrisonerController>();
     }
 
     void Update() {
-        transform.Translate(10f * Time.deltaTime, 0, 0);
+        transform.Translate(bulletspeed * Time.deltaTime, 0, 0, Space.World);
         if(transform.position.x > deathWall) {
             Destroy(gameObject);
         }

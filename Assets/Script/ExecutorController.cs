@@ -3,14 +3,13 @@ using UnityEngine;
 public class ExecutorController : MonoBehaviour {
     public bool is_round_start = true;
     public bool is_Bonus = false;
-    private float final_velocity;
-    private float velocity = 200;
-    private float start_velocity;
+    public float final_velocity = 32;
+    public float start_velocity = 2;
+    public float acceration = 1200;
     private Rigidbody2D rb;
     private Vector3 lastVelocity;
-    private float acceration;
     private float decend;
-    private float multiplier = 2;
+    public float multiplier = 4;
     public float Health = 3;
     public int click_counter;
 
@@ -23,12 +22,11 @@ public class ExecutorController : MonoBehaviour {
 
 
     void Start() {
-        acceration = multiplier * 2;
+        //acceration = multiplier * 2;
         decend = multiplier;
-        start_velocity = velocity / 100 * multiplier;
-        final_velocity = start_velocity * (multiplier * 2);
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = new Vector3(0, start_velocity * -1, 0);
+        Vector3 relativeVelocity = transform.InverseTransformPoint(rb.velocity);
         Health = 3;
     }
 
@@ -46,10 +44,10 @@ public class ExecutorController : MonoBehaviour {
     private void ExecutorMovement() {
         if(Input.GetKey(KeyCode.A)) {
             if(rb.velocity.y <= final_velocity && rb.velocity.y > 0) {
-                rb.AddForce(new Vector2(0, velocity * acceration * Time.deltaTime));
+                rb.AddForce(new Vector2(0, acceration * Time.deltaTime));
 
             } else if(rb.velocity.y >= -1 * final_velocity && rb.velocity.y <= 0) {
-                rb.AddForce(new Vector2(0, -1 * velocity * acceration * Time.deltaTime));
+                rb.AddForce(new Vector2(0, -1 * acceration * Time.deltaTime));
             }
         } else {
             if(rb.velocity.y > start_velocity) {

@@ -3,14 +3,14 @@ using UnityEngine;
 public class RightBulletController : MonoBehaviour {
 
     private float deathWall = -22;
-
+    public float bulletspeed = 10.0f;
     public ExecutorController ExecutorController;
     void Start() {
         ExecutorController = GameObject.FindGameObjectWithTag("Executor").GetComponent<ExecutorController>();
     }
 
     void Update() {
-        transform.Translate(-10f * Time.deltaTime, 0, 0);
+        transform.Translate(-1 * bulletspeed * Time.deltaTime, 0, 0, Space.World);
         if(transform.position.x < deathWall) {
             Destroy(gameObject);
         }
