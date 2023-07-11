@@ -57,7 +57,7 @@ public class GameMode : MonoBehaviour {
         Steps = Duration / Interval;
         StepDistance = TargetDistance / Steps;
 
-        GameStart();
+        
     }
 
     // Update is called once per frame
@@ -71,21 +71,27 @@ public class GameMode : MonoBehaviour {
         } else if(Input.GetKeyDown(KeyCode.R)) {
             PlayVideo(false);
         } else if(Input.GetKeyDown(KeyCode.T)) {
-            StopVideo();
+            GameStart();
         }
 
     }
 
     void GameStart() 
     {
+        Time.timeScale = 1f;
+
         ContentsUI.SetActive(false);
         
         //打開Cloth
         OpenCloth();
 
-        
+
+        PlayerLeft.OnGameStart();
+        PlayerRight.OnGameStart();
+        UpdateHealth();
 
         //開始計時
+        WorldTime = 120f;
         StartCoroutine(StartCountdown());
 
         //關掉人物背板
@@ -124,11 +130,13 @@ public class GameMode : MonoBehaviour {
         //是：Call GameOver(int Winner)
         if (PlayerLeft.Health==0)
         {
-            GameOver(1); //winner：right
+            StartCoroutine(GameOver(1)); //winner：right
+            return;
         }
         else if(PlayerRight.Health==0)
         {
-            GameOver(0); //winner：left
+            StartCoroutine(GameOver(0)); //winner：left
+            return;
         }
         //不是：Call GameTurnRound()
         if(isHitRight) 
@@ -151,10 +159,37 @@ public class GameMode : MonoBehaviour {
         
     }
 
-    void GameOver(int Winner) 
+    IEnumerator GameOver(int Winner) 
     {
+        CloseCloth();
+        Debug.Log("AAAAAAAAAAAA");
+        yield return new WaitForSecondsRealtime(Duration + 0.2f);
+        if(Winner == 0)
+        {
+            LeftWinnerCG.SetActive(true);
+        }
+        else if (Winner == 1)
+        {
+            RightWinnerCG.SetActive(true);
+        }
+        OpenCloth();
 
+        yield return new WaitForSecondsRealtime(5f);
+        LPlayerBoard.SetActive(true);
+        RPlayerBoard.SetActive(true);
+        CloseCloth();
+        Debug.Log("BBBBBBBBBBBBB");
+        yield return new WaitForSecondsRealtime(Duration + 0.2f);
+
+        RightWinnerCG.SetActive(false);
+        LeftWinnerCG.SetActive(false);
+
+        BackContents();
+
+        
     }
+
+
     //Woose Added Delete Bullet
     public void BulletsWipe() 
     {
@@ -270,6 +305,7 @@ public class GameMode : MonoBehaviour {
 
         //關布幕
         CloseCloth();
+        Debug.Log("CCCCCCCC");
         yield return new WaitForSecondsRealtime(Duration + 0.2f);
         OpenCloth();
 
@@ -290,25 +326,17 @@ public class GameMode : MonoBehaviour {
         RPlayerBoard.SetActive(false);
     }
 
+    /*
     IEnumerator WaitShowPlayerBoard()
     {
         yield return new WaitForSecondsRealtime(1f);
         LPlayerBoard.SetActive(true);
         RPlayerBoard.SetActive(true);
     }
-
+    */
+    /*
     IEnumerator GameOverCG(int Winner)
     {
-        if(Winner == 0)
-        {
-            LeftWinnerCG.SetActive(true);
-        }
-        else if(Winner ==1)
-        {
-            RightWinnerCG.SetActive(true);
-        }
-
-
         CloseCloth();
         yield return new WaitForSecondsRealtime(Duration + 0.2f);
         LeftWinnerCG.SetActive(false);
@@ -318,6 +346,7 @@ public class GameMode : MonoBehaviour {
 
         
     }
+    */
 
     void BackContents()
     {
