@@ -8,7 +8,6 @@ public class PrisonerController : MonoBehaviour {
     private Rigidbody2D rb;
     private Vector3 lastVelocity;
     public float acceration = 1200;
-    private float decend;
     public float multiplier = 4;
     public float Health = 3;
     public int click_counter;
@@ -19,8 +18,6 @@ public class PrisonerController : MonoBehaviour {
     void Start() {
 
         is_Bonus = false;
-        //acceration = multiplier * 2;
-        decend = multiplier;
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = new Vector3(0, start_velocity, 0);
         Health = 3;
@@ -46,9 +43,9 @@ public class PrisonerController : MonoBehaviour {
             }
         } else {
             if(rb.velocity.y > start_velocity) {
-                rb.AddForce(new Vector2(0, -1 * decend));
+                rb.AddForce(new Vector2(0, -1 * acceration * Time.deltaTime));
             } else if(rb.velocity.y < start_velocity * -1) {
-                rb.AddForce(new Vector2(0, decend));
+                rb.AddForce(new Vector2(0, acceration * Time.deltaTime));
             }
         }
     }

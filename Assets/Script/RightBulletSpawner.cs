@@ -14,16 +14,18 @@ public class RightBulletSpawner : MonoBehaviour {
     void Update() {
         Vector2 bullet_position = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
         //Reload 
+
         if(prisonerMagazine < 3 && !prisonerCooldown.IsCoolingDown) {
-            prisonerMagazine = 3;
-            Debug.Log("prisoner reloaded!");
+            prisonerMagazine++;
+            Debug.Log("prisoner reloaded!" + "\n prisonerMagazine remaining = " + prisonerMagazine);
+            prisonerCooldown.StartCooldown();
         }
 
         if(Input.GetKeyUp(KeyCode.P) && gameObject.name == "Prisoner" && prisonerMagazine > 0 && !isBonus) {
+            if(prisonerMagazine == 3) prisonerCooldown.StartCooldown();
             PrisonerAttack(bullet_position);
             prisonerMagazine--;
             Debug.Log("prisoner Fire!" + "\n prisonerMagazine remaining = " + prisonerMagazine);
-
         }
 
     }
@@ -31,7 +33,6 @@ public class RightBulletSpawner : MonoBehaviour {
         GameObject rightbullet = Instantiate(RightBullet);
         rightbullet.transform.position = bullet_position;
         if(prisonerCooldown.IsCoolingDown) { return; }// if already in cooldown then skip
-        prisonerCooldown.StartCooldown();
     }
 
     public void OnRoundStart() {

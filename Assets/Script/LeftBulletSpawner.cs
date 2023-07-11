@@ -15,11 +15,13 @@ public class LeftBulletSpawner : MonoBehaviour {
         //Reload 
 
         if(executorMagazine < 3 && !executorCooldown.IsCoolingDown) {
-            executorMagazine = 3;
-            Debug.Log("executor reloaded!");
+            executorMagazine++;
+            Debug.Log("executor reloaded!" + "\n executorMagazine remaining = " + executorMagazine);
+            executorCooldown.StartCooldown();
         }
 
         if(Input.GetKeyUp(KeyCode.A) && gameObject.name == "Executor" && executorMagazine > 0 && !isBonus) {
+            if(executorMagazine == 3) executorCooldown.StartCooldown();
             ExecutorAttack(bullet_position);
             executorMagazine--;
             Debug.Log("executor Fire!" + "\n executorMagazine remaining = " + executorMagazine);
@@ -31,7 +33,6 @@ public class LeftBulletSpawner : MonoBehaviour {
         GameObject leftbullet = Instantiate(LeftBullet);
         leftbullet.transform.position = bullet_position;
         if(executorCooldown.IsCoolingDown) { return; }
-        executorCooldown.StartCooldown();
     }
 
     public void OnRoundStart() {

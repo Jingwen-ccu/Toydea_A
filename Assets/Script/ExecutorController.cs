@@ -8,7 +8,6 @@ public class ExecutorController : MonoBehaviour {
     public float acceration = 1200;
     private Rigidbody2D rb;
     private Vector3 lastVelocity;
-    private float decend;
     public float multiplier = 4;
     public float Health = 3;
     public int click_counter;
@@ -22,8 +21,6 @@ public class ExecutorController : MonoBehaviour {
 
 
     void Start() {
-        //acceration = multiplier * 2;
-        decend = multiplier;
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = new Vector3(0, start_velocity * -1, 0);
         Vector3 relativeVelocity = transform.InverseTransformPoint(rb.velocity);
@@ -51,9 +48,9 @@ public class ExecutorController : MonoBehaviour {
             }
         } else {
             if(rb.velocity.y > start_velocity) {
-                rb.AddForce(new Vector2(0, -1 * decend));
+                rb.AddForce(new Vector2(0, -1 * acceration * Time.deltaTime));
             } else if(rb.velocity.y < start_velocity * -1) {
-                rb.AddForce(new Vector2(0, decend));
+                rb.AddForce(new Vector2(0, acceration * Time.deltaTime));
             }
         }
     }

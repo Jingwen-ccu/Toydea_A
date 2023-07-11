@@ -923,7 +923,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &609470006
 Transform:
   m_ObjectHideFlags: 0
@@ -2244,7 +2244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b73bda12dde3334ab3987ac909159ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LeftBullet: {fileID: 1577667800561791273, guid: 216c2d2ea54fe7a44b2b4c5532b87577, type: 3}
+  LeftBullet: {fileID: 3986194342497657135, guid: 216c2d2ea54fe7a44b2b4c5532b87577, type: 3}
   executorCooldown:
     cooldownTime: 3
   isBonus: 0
