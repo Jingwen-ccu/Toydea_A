@@ -17,7 +17,10 @@ public class ExecutorController : MonoBehaviour {
     //JingWem Add
     public GameMode GM;
 
-
+    //Bullet
+    public GameObject Weapon_L1;
+    public GameObject Weapon_L2;
+    public GameObject Weapon_L3;
 
 
     void Start() {
@@ -68,7 +71,8 @@ public class ExecutorController : MonoBehaviour {
 
         //Debug.Log(Health);
         if(Health == 0) {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            OnGameStart();
         }
     }
     public void InitExecutor() {

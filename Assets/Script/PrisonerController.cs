@@ -15,6 +15,11 @@ public class PrisonerController : MonoBehaviour {
     public BonusBuffController bonusBuffController;
     public GameMode GM;
 
+    
+
+
+
+
     void Start() {
 
         is_Bonus = false;
@@ -61,7 +66,7 @@ public class PrisonerController : MonoBehaviour {
 
         Debug.Log(Health);
         if(Health == 0) {
-            Destroy(gameObject);
+            //Destroy(gameObject);
             OnGameStart();
         }
     }
@@ -101,4 +106,7 @@ public class PrisonerController : MonoBehaviour {
         is_Bonus = false;
         is_round_start = false;
     }
+
+
+    
 }

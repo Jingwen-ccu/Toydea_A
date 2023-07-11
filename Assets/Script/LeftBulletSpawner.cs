@@ -6,8 +6,18 @@ public class LeftBulletSpawner : MonoBehaviour {
 
     public bool isBonus;
     private int executorMagazine;
+
+    //Music
+    public Music music;
+
+    //Bullet
+
+    public GameObject Weapon_R1;
+    public GameObject Weapon_R2;
+    public GameObject Weapon_R3;
     void Start() {
         executorMagazine = 3;
+        UpdateBulletUI();
     }
 
     void Update() {
@@ -16,6 +26,7 @@ public class LeftBulletSpawner : MonoBehaviour {
 
         if(executorMagazine < 3 && !executorCooldown.IsCoolingDown) {
             executorMagazine++;
+            UpdateBulletUI();
             Debug.Log("executor reloaded!" + "\n executorMagazine remaining = " + executorMagazine);
             executorCooldown.StartCooldown();
         }
@@ -24,6 +35,8 @@ public class LeftBulletSpawner : MonoBehaviour {
             if(executorMagazine == 3) executorCooldown.StartCooldown();
             ExecutorAttack(bullet_position);
             executorMagazine--;
+            music.Music_Shoot();
+            UpdateBulletUI();
             Debug.Log("executor Fire!" + "\n executorMagazine remaining = " + executorMagazine);
         }
 
@@ -37,5 +50,37 @@ public class LeftBulletSpawner : MonoBehaviour {
 
     public void OnRoundStart() {
         executorMagazine = 3;
+        UpdateBulletUI();
+    }
+
+    void UpdateBulletUI()
+    {
+
+        Weapon_R1.SetActive(false);
+        Weapon_R2.SetActive(false);
+        Weapon_R3.SetActive(false);
+        switch (executorMagazine)
+        {
+            case 0:
+                break;
+            case 1:
+                Weapon_R1.SetActive(true);
+                break;
+            case 2:
+                Weapon_R1.SetActive(true);
+                Weapon_R2.SetActive(true);
+                break;
+            case 3:
+                Weapon_R1.SetActive(true);
+                Weapon_R2.SetActive(true);
+                Weapon_R3.SetActive(true);
+                break;
+        }
+
+    }
+    public void ResetBullet()
+    {
+        executorMagazine = 3;
+        UpdateBulletUI();
     }
 }
