@@ -100,7 +100,7 @@ public class GameMode : MonoBehaviour {
         colliderplayerLeft = PlayerLeft.GetComponent<Collider2D>();
         colliderplayerRight = PlayerRight.GetComponent<Collider2D>();
 
-}
+    }
 
     // Update is called once per frame
     void Update() {
@@ -168,9 +168,8 @@ public class GameMode : MonoBehaviour {
 
 
     //When Hit Somebody
-    public void HitPlayer(bool isHitRight) 
-    {
-        
+    public void HitPlayer(bool isHitRight) {
+
 
         Script_Music.Music_Hit();
 
@@ -210,19 +209,16 @@ public class GameMode : MonoBehaviour {
     IEnumerator GameOver(int Winner) {
         Time.timeScale = 0.3875f;
 
-        
-        if (Winner == 0)
-        {
+
+        if(Winner == 0) {
             CameraController.ZoomCamera(true);
             RightBlood.SetActive(true);
-            RightBlood.GetComponent<Animator>().Play("bloodRight");
-        }
-        else
-        {
+            RightBlood.GetComponent<Animator>().Play("newbloodRight");
+        } else {
 
             CameraController.ZoomCamera(false);
             LeftBlood.SetActive(true);
-            LeftBlood.GetComponent<Animator>().Play("bloodLeft");
+            LeftBlood.GetComponent<Animator>().Play("newbloodLeft");
         }
         yield return new WaitForSecondsRealtime(HightlightTime);
         CameraController.InitCamera();
@@ -412,14 +408,14 @@ public class GameMode : MonoBehaviour {
 
     IEnumerator PlayShortVideo(bool isHitRight) {
 
-        
+
 
         colliderplayerRight.enabled = false;
         colliderplayerLeft.enabled = false;
 
         //Debug.Log("PLAY video");
 
-        
+
         //遊戲暫停
         Time.timeScale = 0f;
         //yield return new WaitForSecondsRealtime(1.3f);
@@ -432,7 +428,7 @@ public class GameMode : MonoBehaviour {
 
         yield return new WaitForSecondsRealtime(2f);
         //Debug.Log("stop video");
-        
+
 
         /*
         if (isHitRight)
@@ -445,20 +441,20 @@ public class GameMode : MonoBehaviour {
 
         }
         */
-        
-        
+
+
 
         //關布幕
         CloseCloth();
         Debug.Log("CCCCCCCC");
-        
+
 
 
         //初始化位置子彈
         GameInitiate();
         StopVideo();
         yield return new WaitForSecondsRealtime(Duration + 0.2f);
-        
+
         //RDeadIMG.SetActive(false);
         //LDeadIMG.SetActive(false);
 
