@@ -19,7 +19,7 @@ public class LeftBulletController : MonoBehaviour {
     }
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.gameObject.name == "Prisoner") {
-            CameraController.ZoomCamera(true);
+            //CameraController.ZoomCamera(true);
             Destroy(gameObject, 0.25f);
             Debug.Log("Hit Prisoner");
             PrisonerController.OnHit();

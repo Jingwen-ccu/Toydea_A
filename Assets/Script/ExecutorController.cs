@@ -6,6 +6,7 @@ public class ExecutorController : MonoBehaviour {
     public float final_velocity = 32;
     public float start_velocity = 2;
     public float acceration = 1200;
+    public float deacceration = 2400;
     private Rigidbody2D rb;
     private Vector3 lastVelocity;
     public float multiplier = 4;
@@ -21,7 +22,6 @@ public class ExecutorController : MonoBehaviour {
     public GameObject Weapon_L1;
     public GameObject Weapon_L2;
     public GameObject Weapon_L3;
-
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -51,9 +51,9 @@ public class ExecutorController : MonoBehaviour {
             }
         } else {
             if(rb.velocity.y > start_velocity) {
-                rb.AddForce(new Vector2(0, -1 * acceration * Time.deltaTime));
+                rb.AddForce(new Vector2(0, -1 * deacceration * Time.deltaTime));
             } else if(rb.velocity.y < start_velocity * -1) {
-                rb.AddForce(new Vector2(0, acceration * Time.deltaTime));
+                rb.AddForce(new Vector2(0, deacceration * Time.deltaTime));
             }
         }
     }

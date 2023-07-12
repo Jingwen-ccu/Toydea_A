@@ -4,13 +4,19 @@ using UnityEngine.UI;
 
 public class GameMode : MonoBehaviour {
 
+    public GameObject LDeadIMG;
+    public GameObject RDeadIMG;
+
     public ExecutorController PlayerLeft; //之後會改為Script_Controller
     public PrisonerController PlayerRight; //之後會改為Script_Controller
+    public Collider2D colliderplayerLeft;
+    public Collider2D colliderplayerRight;
     public CameraController CameraController;
     public GameObject LeftBlood;
     public GameObject RightBlood;
     public GameObject LeftDeathBlood;
     public GameObject RightDeathBlood;
+
 
     //Contents
     public GameObject ContentsUI;
@@ -18,7 +24,7 @@ public class GameMode : MonoBehaviour {
 
     //Function: Timer
     private float WorldTime = 120f;
-    private float HightlightTime = 2f;
+    private float HightlightTime = 1f;
     public Text Times;
     Coroutine TimerCoroutine;
 
@@ -91,9 +97,10 @@ public class GameMode : MonoBehaviour {
         StepDistance = TargetDistance / Steps;
 
         Script_Music.Music_Contents();
+        colliderplayerLeft = PlayerLeft.GetComponent<Collider2D>();
+        colliderplayerRight = PlayerRight.GetComponent<Collider2D>();
 
-
-    }
+}
 
     // Update is called once per frame
     void Update() {
@@ -161,7 +168,9 @@ public class GameMode : MonoBehaviour {
 
 
     //When Hit Somebody
-    public void HitPlayer(bool isHitRight) {
+    public void HitPlayer(bool isHitRight) 
+    {
+        
 
         Script_Music.Music_Hit();
 
@@ -200,19 +209,29 @@ public class GameMode : MonoBehaviour {
 
     IEnumerator GameOver(int Winner) {
         Time.timeScale = 0.3875f;
-        if(Winner == 0) {
+
+        
+        if (Winner == 0)
+        {
+            CameraController.ZoomCamera(true);
             RightBlood.SetActive(true);
             RightBlood.GetComponent<Animator>().Play("bloodRight");
-        } else {
+        }
+        else
+        {
+
+            CameraController.ZoomCamera(false);
             LeftBlood.SetActive(true);
             LeftBlood.GetComponent<Animator>().Play("bloodLeft");
         }
         yield return new WaitForSecondsRealtime(HightlightTime);
+        CameraController.InitCamera();
         RightBlood.SetActive(false);
         LeftBlood.SetActive(false);
         //遊戲暫停
         Time.timeScale = 0f;
         CloseCloth();
+        BulletsWipe();
 
         yield return new WaitForSecondsRealtime(Duration + 0.2f);
         WorldTime = 120f;
@@ -393,23 +412,17 @@ public class GameMode : MonoBehaviour {
 
     IEnumerator PlayShortVideo(bool isHitRight) {
 
+        
+
+        colliderplayerRight.enabled = false;
+        colliderplayerLeft.enabled = false;
 
         //Debug.Log("PLAY video");
 
-        Time.timeScale = 0.3875f;
-        if(isHitRight) {
-            RightBlood.SetActive(true);
-            RightBlood.GetComponent<Animator>().Play("bloodRight");
-        } else {
-            LeftBlood.SetActive(true);
-            LeftBlood.GetComponent<Animator>().Play("bloodLeft");
-        }
-        yield return new WaitForSecondsRealtime(HightlightTime);
-        RightBlood.SetActive(false);
-        LeftBlood.SetActive(false);
+        
         //遊戲暫停
         Time.timeScale = 0f;
-        yield return new WaitForSecondsRealtime(1.3f);
+        //yield return new WaitForSecondsRealtime(1.3f);
         if(isHitRight) {
             PlayVideo(false);
         } else {
@@ -417,25 +430,54 @@ public class GameMode : MonoBehaviour {
 
         }
 
-        yield return new WaitForSecondsRealtime(1.3f);
+        yield return new WaitForSecondsRealtime(2f);
         //Debug.Log("stop video");
-        StopVideo();
+        
+
+        /*
+        if (isHitRight)
+        {
+            RDeadIMG.SetActive(true);
+        }
+        else
+        {
+            LDeadIMG.SetActive(true);
+
+        }
+        */
+        
+        
 
         //關布幕
         CloseCloth();
         Debug.Log("CCCCCCCC");
+        
+
 
         //初始化位置子彈
         GameInitiate();
+        StopVideo();
         yield return new WaitForSecondsRealtime(Duration + 0.2f);
+        
+        //RDeadIMG.SetActive(false);
+        //LDeadIMG.SetActive(false);
+
         OpenCloth();
 
 
 
         yield return new WaitForSecondsRealtime(0.9f);
 
+
+
+
         //遊戲開始
         Time.timeScale = 1f;
+
+
+        colliderplayerRight.enabled = true;
+        colliderplayerLeft.enabled = true;
+
         //子彈更新
         RBS.ResetBullet();
         LBS.ResetBullet();

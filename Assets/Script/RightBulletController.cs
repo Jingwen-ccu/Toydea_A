@@ -21,7 +21,7 @@ public class RightBulletController : MonoBehaviour {
     }
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.gameObject.name == "Executor") {
-            CameraController.ZoomCamera(false);
+            //CameraController.ZoomCamera(false);
             Destroy(gameObject, 0.25f);
             //Debug.Log("Hit Prisoner");
             ExecutorController.OnHit();

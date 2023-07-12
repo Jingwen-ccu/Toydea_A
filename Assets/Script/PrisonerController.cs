@@ -18,7 +18,6 @@ public class PrisonerController : MonoBehaviour {
     public GameMode GM;
 
     void Start() {
-
         is_Bonus = false;
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = new Vector3(0, start_velocity, 0);
@@ -64,6 +63,9 @@ public class PrisonerController : MonoBehaviour {
         if(Health == 0) {
             //Destroy(gameObject);
             OnGameStart();
+        }
+        else
+        {
         }
     }
     public void InitPrisoner() {
