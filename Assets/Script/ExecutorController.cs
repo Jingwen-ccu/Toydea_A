@@ -69,7 +69,7 @@ public class ExecutorController : MonoBehaviour {
 
         //Debug.Log(Health);
         if(Health == 0) {
-            OnGameStart();
+            //OnGameStart();
         } else {
 
         }

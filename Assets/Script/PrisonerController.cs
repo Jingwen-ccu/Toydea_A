@@ -62,10 +62,8 @@ public class PrisonerController : MonoBehaviour {
         Debug.Log(Health);
         if(Health == 0) {
             //Destroy(gameObject);
-            OnGameStart();
-        }
-        else
-        {
+            //OnGameStart();
+        } else {
         }
     }
     public void InitPrisoner() {
